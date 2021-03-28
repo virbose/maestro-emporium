@@ -18,7 +18,7 @@
             <div class="container">
                 <h1 class="display-3">Maestro Emporium</h1>
                 <h3>Cart Problem</h3>
-                <h4>Step 2/3</h4>
+                <h4>Step 3/3</h4>
                 <p>In this step, one needs to be able to add 5 items to a cart, then 3 more before seeing the
                     correct item count and total</p>
                 <p><a data-toggle="collapse" href="#collapseStep2" role="button" aria-expanded="false"
@@ -33,20 +33,28 @@
                             <li>
                                 And a product, Dove Soap with a unit price of 39.99
                             </li>
+                            <li>
+                                And another product, Axe Deo with a unit price of 99.99
+                            </li>
+                            <li>
+                                And a sales tax rate of 12.5%
+                            </li>
                         </ul>
 
 
                         <p>When:</p>
 
                         <ul>
-                            <li>The user adds 5 Dove Soaps to the shopping cart</li>
-                            <li>And then adds another 3 Dove Soaps to the shopping cart</li>
+                            <li>The user adds 2 Dove Soaps to the shopping cart</li>
+                            <li>And then adds 2 Axe Deos to the shopping cart</li>
                         </ul>
                         <p>Then:</p>
 
                         <ul>
-                            <li>The shopping cart should contain 8 Dove Soaps each with a unit price of 39.99</li>
-                            <li>And the shopping cart’s total price should equal 319.92</li>
+                            <li>The shopping cart should contain 2 Dove Soaps each with a unit price of 39.99</li>
+                            <li>And the shopping cart should contain 2 Axe Deos each with a unit price of 99.99</li>
+                            <li>And the total sales tax amount for the shopping cart should equal 35.00</li>
+                            <li>And the shopping cart’s total price should equal 314.96</li>
                         </ul>
                     </div>
                 </div>
@@ -58,17 +66,12 @@
             <div class="row">
                 <div class="col-md-9">
                     {% for product in products %}
-                        <div class="col-md-4">
+                        <div class="col-md-3">
                             <h2>{{ product.name }}</h2>
                             <p>£{{ product.item_price|floatformat:"-2" }}</p>
                             <p><a class="btn btn-secondary"
-                                  href="{% url 'add_to_cart' product_id=product.pk quantity=5 %}" role="button">Add 5 to
+                                  href="{% url 'add_to_cart' product_id=product.pk quantity=2 %}" role="button">Add 2 to
                                 cart &raquo;</a>
-                            </p>
-                            <p>
-                                <a class="btn btn-secondary"
-                                   href="{% url 'add_to_cart' product_id=product.pk quantity=3 %}" role="button">Add 3
-                                    more to cart &raquo;</a>
                             </p>
                         </div>
                     {% empty %}
@@ -91,7 +94,9 @@
                             </ul>
                         </div>
                         <p>Total items in cart - {{ cart.items_in_cart|default:'0' }}</p>
-                        <p>Cart Total - £{{ cart.cart_total|default:'0.00' }}</p>
+                        <p>Cart Total (no tax)- £{{ cart.cart_total|default:'0.00' }}</p>
+                        <p>Cart Tax - £{{ cart.cart_tax|default:'0.00' }}</p>
+                        <p>Cart Total (with tax)- £{{ cart.cart_grand_total|default:'0.00' }}</p>
 
                     </div>
                 </div>

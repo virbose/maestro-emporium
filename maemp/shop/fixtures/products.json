@@ -1,1 +1,1 @@
-[{"model": "shop.product", "pk": 1, "fields": {"name": "Dove Soap", "item_price": "39.99"}}]
+[{"model": "shop.product", "pk": 1, "fields": {"name": "Dove Soap", "item_price": "39.99"}}, {"model": "shop.product", "pk": 2, "fields": {"name": "Axe Deo", "item_price": "99.99"}}]
