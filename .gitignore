@@ -128,8 +128,8 @@ dmypy.json
 # Pyre type checker
 .pyre/
 
-#pytest cache
-.pytest_cache/
-
 # jetbrains
 .idea/
+
+# static files
+maemp/staticfiles/
