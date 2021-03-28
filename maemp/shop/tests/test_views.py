@@ -24,9 +24,14 @@ class AddItemToCartViewTest(TestCase):
     def setUp(self) -> None:
         Product = apps.get_model('shop', 'Product')
         self.product = Product.objects.first()
+        self.second_product = Product.objects.last()
         self.quantity = 5
         self.url = reverse('add_to_cart', kwargs={
             'product_id': self.product.pk,
+            'quantity': self.quantity
+        })
+        self.second_url = reverse('add_to_cart', kwargs={
+            'product_id': self.second_product.pk,
             'quantity': self.quantity
         })
         self.redirect_url = reverse('shop_home')
@@ -49,6 +54,11 @@ class AddItemToCartViewTest(TestCase):
         self.client.get(self.url)
         # ensure there is still the same number of cartItems
         self.assertEqual(ci_len, CartItem.objects.filter(product_id=self.product.pk).count())
+
+    def test_add_second_product_to_cart(self) -> None:
+        CartItem = apps.get_model('shop', 'CartItem')
+        self.client.get(self.second_url)
+        self.assertEqual(CartItem.objects.filter(product_id=self.second_product.pk).count(), 1)
 
     def test_add_to_cart_no_post(self) -> None:
         response = self.client.post(self.url)

@@ -63,5 +63,33 @@ Then:
 1. Build the app, start it with `make run`, then go to the [homepage](http://localhost:8000). You will have a button 
    that adds 5 of the requested item to cart, and one that adds 3 of that item to cart. Once that is done, you will 
    be able to see the cart total and number of items on the right of the page.
+2. In a terminal, run `make test-python`. This will run a set of tests that are specific to step 2. You can view these
+   tests in `shop/tests/test_models.py` and `shop/tests/test_views.py`.
+
+### Step 3:
+
+Given:
+
+- An empty shopping cart
+- And a product, Dove Soap with a unit price of 39.99
+- And another product, Axe Deo with a unit price of 99.99
+- And a sales tax rate of 12.5%
+
+When:
+
+- The user adds 2 Dove Soaps to the shopping cart
+- And then adds 2 Axe Deos to the shopping cart
+
+Then:
+
+- The shopping cart should contain 2 Dove Soaps each with a unit price of 39.99
+- And the shopping cart should contain 2 Axe Deos each with a unit price of 99.99
+- And the total sales tax amount for the shopping cart should equal 35.00
+- And the shopping cart’s total price should equal 314.96
+
+### How to test Step 3:
+1. Build the app, start it with `make run`, then go to the [homepage](http://localhost:8000). You will have a button
+   that adds 2 of each item to cart. Once that is done, you will be able to see the cart total and number 
+   of items on the right of the page.
 2. In a terminal, run `make test-python`. This will run a set of tests that are specific to step 3. You can view these
    tests in `shop/tests/test_models.py` and `shop/tests/test_views.py`.

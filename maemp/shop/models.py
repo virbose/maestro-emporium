@@ -32,6 +32,14 @@ class Cart(models.Model):
     @property
     def items_in_cart(self) -> int:
         return  sum(self.cartitem_set.all().values_list('item_qty', flat=True)) or 0
+
+    @property
+    def cart_tax(self) -> Decimal:
+        return Decimal(self.cart_total * Decimal('0.125')).quantize(Decimal('0.01'), rounding=ROUND_HALF_UP)
+
+    @property
+    def cart_grand_total(self) -> Decimal:
+        return Decimal(self.cart_total + self.cart_tax).quantize(Decimal('0.01'), rounding=ROUND_HALF_UP)
             
 
 class CartItem(models.Model):
