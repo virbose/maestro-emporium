@@ -1,0 +1,26 @@
+version: "3"
+
+services:
+  postgres:
+    image: postgres:12-alpine
+    environment:
+      - POSTGRES_USER=${POSTGRESQL_DB_USER}
+      - POSTGRES_PASSWORD=${POSTGRESQL_PASSWORD}
+    ports:
+      - ${POSTGRESQL_PORT}:${POSTGRESQL_PORT}
+  maemp:
+    build: ./maemp
+    command: sh -c "python manage.py migrate && python manage.py test && python manage.py runserver 0.0.0.0:${DJANGO_PORT}"
+    volumes:
+      - ./maemp:/app/maemp
+    environment:
+      - DB_HOST=postgres
+      - DB_PORT=${POSTGRESQL_PORT}
+      - DB_USER=${POSTGRESQL_DB_USER}
+      - DB_NAME=${POSTGRESQL_DB_USER}
+      - DB_PASS=${POSTGRESQL_PASSWORD}
+      - SECRET_KEY=${SECRET_KEY}
+    ports:
+      - ${DJANGO_PORT}:${DJANGO_PORT}
+    depends_on:
+      - postgres
