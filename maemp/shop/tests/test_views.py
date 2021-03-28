@@ -1,5 +1,3 @@
-from django.db import transaction
-from psycopg2.errors import ForeignKeyViolation
 from django.test import TestCase
 from django.apps import apps
 from django.urls import reverse
@@ -36,11 +34,21 @@ class AddItemToCartViewTest(TestCase):
     def test_add_to_cart_ok(self) -> None:
         CartItem = apps.get_model('shop', 'CartItem')
         self.client.get(self.url)
-        self.assertGreaterEqual(CartItem.objects.count(), 1)
+        self.assertEqual(CartItem.objects.filter(product_id=self.product.pk).count(), 1)
 
     def test_add_to_cart_redirect(self) -> None:
         response = self.client.get(self.url)
         self.assertRedirects(response, self.redirect_url)
+
+    def test_add_to_cart_again(self) -> None:
+        CartItem = apps.get_model('shop', 'CartItem')
+        # Call once
+        self.client.get(self.url)
+        ci_len = CartItem.objects.filter(product_id=self.product.pk).count()
+        # Call again
+        self.client.get(self.url)
+        # ensure there is still the same number of cartItems
+        self.assertEqual(ci_len, CartItem.objects.filter(product_id=self.product.pk).count())
 
     def test_add_to_cart_no_post(self) -> None:
         response = self.client.post(self.url)

@@ -25,6 +25,11 @@ class AddToCartView(View):
         product_id = kwargs.get('product_id')
         quantity = kwargs.get('quantity')
         if product_id and quantity:
-            CartItem.objects.create(cart_id=cart_id, product_id=product_id, item_qty=quantity)
+            try:
+                ci = CartItem.objects.get(cart_id=cart_id, product_id=product_id)
+                ci.item_qty += int(quantity)
+                ci.save(update_fields=('item_qty',))
+            except CartItem.DoesNotExist:
+                CartItem.objects.create(cart_id=cart_id, product_id=product_id, item_qty=quantity)
 
         return HttpResponseRedirect(reverse('shop_home'))

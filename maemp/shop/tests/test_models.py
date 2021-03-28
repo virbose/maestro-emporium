@@ -97,3 +97,43 @@ class CartItemModelTestsStep1(TestCase):
 
     def test_items_in_cart(self) -> None:
         self.assertEqual(self.cart.items_in_cart, 5)
+
+
+class CartItemModelTestsStep2(TestCase):
+    """
+    CartItem model test specific to EqualExperts technical exercise step 2
+    Note: This is testing a very special use case, therefore these tests are checking against fixed values. One would
+    NEVER do unit tests this way.
+    """
+
+    def setUp(self) -> None:
+        self.product = ProductFactory.create(
+            name='Dove Soap',
+            item_price=39.99
+        )
+        self.cartitem = CartItemFactory.create(
+            product=self.product,
+            item_qty=8
+        )
+        self.cart = self.cartitem.cart
+        self.qty = self.cartitem.item_qty
+
+    def test_repr(self) -> None:
+        self.assertEqual(str(self.cartitem), 'Dove Soap - 8')
+
+    def test_total(self) -> None:
+        self.assertEqual(self.cart.cart_total, Decimal('319.92'))
+
+    def test_items_in_cart(self) -> None:
+        self.assertEqual(self.cart.items_in_cart, 8)
+
+    def test_add_same_item_raises_exception(self) -> None:
+        """
+        We should not be able to add a new cart item for the same product, the view should always update existing ones
+        """
+        with self.assertRaises(IntegrityError):
+            CartItemFactory.create(
+                cart=self.cart,
+                product=self.product,
+                item_qty=6
+            )
